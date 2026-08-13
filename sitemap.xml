@@ -1,0 +1,22 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/404.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/LICENSE-text.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/authors.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/index.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/PhysioPipe-package.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/index.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/pp_bind_cohort.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/pp_ecg_demo_files.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/pp_ecg_read.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/pp_hrv_combine.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/pp_plot_tachogram.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/pp_simulate.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/pp_wfdb_files.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/pp_write_parquet.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/tar_ecg_hrv.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/tar_eda_scr.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/tar_eeg_bandpower.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/tar_emg_features.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioPipe/reference/tar_physio_report.html</loc></url>
+</urlset>
+
