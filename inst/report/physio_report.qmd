@@ -1,0 +1,34 @@
+---
+title: "PhysioPipe report"
+format: html
+---
+
+```{r setup, include=FALSE}
+library(targets)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+This report is rendered by a `targets` pipeline: each table/figure below is read
+from a target with `tar_read()`, so re-rendering happens automatically whenever
+an upstream result changes.
+
+```{r}
+have <- function(x) x %in% targets::tar_meta()$name
+```
+
+```{r}
+#| label: ecg
+if (have("ecg_hrv")) {
+  knitr::kable(tar_read(ecg_hrv), caption = "ECG — heart-rate variability (time + frequency)")
+}
+if (have("ecg_fig")) {
+  knitr::include_graphics(tar_read(ecg_fig))
+}
+```
+
+```{r}
+#| label: eeg
+if (have("eeg_power")) {
+  knitr::kable(tar_read(eeg_power), caption = "EEG — band power per channel")
+}
+```

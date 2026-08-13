@@ -1,0 +1,5 @@
+url: https://x-biosignal.github.io/PhysioPipe/
+template:
+  bootstrap: 5
+  bslib:
+    primary: "#2c3e50"
