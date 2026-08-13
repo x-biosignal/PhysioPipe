@@ -80,8 +80,7 @@ test in `tests/testthat/test-factories.R`.
 The targets factory is *one* binding. The actual analysis logic is
 exposed as a CLI and writes language-neutral Parquet, so the same step
 runs under targets, Nextflow, or plain shell — and the output is
-readable from Python/DuckDB. See [ADR
-0002](https://x-biosignal.github.io/planning/adr/0002-pipeline-collection-architecture.md).
+readable from Python/DuckDB.
 
 ``` bash
 # Layer 2 — orchestrator-agnostic CLI (writes Parquet)
@@ -103,11 +102,10 @@ Verified equivalent: CLI, targets, and Nextflow all produce
 `mean_hr = 72.03, sdnn = 1.389` on the bundled MIT-BIH `100` record; the
 Parquet reads back in Python with no R runtime.
 
-## Publish / manage (same flow as the other packages)
+## Install
 
-Developed privately in `physio-ecosystem/PhysioPipe/`, published to
-`x-biosignal/PhysioPipe` (r-universe + pkgdown) via
-`publishing/sync_public.sh` after adding it to
-`publishing/packages.json`. CI is the canonical `R-CMD-check.yaml` with
-`extra-repositories: https://x-biosignal.r-universe.dev` under the
-**`setup-r`** step so the sibling Physio\* packages resolve.
+``` r
+
+install.packages("PhysioPipe",
+  repos = c("https://x-biosignal.r-universe.dev", getOption("repos")))
+```
