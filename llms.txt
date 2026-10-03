@@ -8,11 +8,17 @@ byte-level provenance for free.
 
 ``` r
 
-# _targets.R
 library(targets)
 library(PhysioPipe)
 
-list(
+# A factory returns ready-made `targets` objects -- no _targets.R or pipeline
+# run is needed to see what it produces.
+hrv <- tar_ecg_hrv()                            # ECG -> R-peaks -> RR -> HRV + tachogram
+length(hrv)                                     # the linked targets it generates
+vapply(hrv, function(t) t$name, character(1))   # ecg_pe, ecg_peaks, ... ecg_hrv
+
+# A whole standard pipeline is just a list of factories:
+pipeline <- list(
   tar_ecg_hrv(),        # resting ECG -> R-peaks -> RR -> HRV (time + freq) + figure
   tar_eeg_bandpower(),  # EEG -> band power per channel
   tar_emg_features(),   # EMG -> linear envelope + spectral fatigue
@@ -20,10 +26,14 @@ list(
 )
 ```
 
-``` r
+Save that `pipeline` list as `_targets.R`, then build it from the
+project directory. Building runs the modality packages
+(`PhysioIO`/`PhysioECG`/`PhysioEDA`/…), which are optional dependencies
+installed only for the stages you use:
 
+``` text
 targets::tar_make()             # build (skips unchanged steps)
-targets::tar_visnetwork()       # view the DAG
+targets::tar_visnetwork()       # view the DAG (needs visNetwork)
 targets::tar_read(ecg_hrv)      # a result
 ```
 
@@ -48,9 +58,13 @@ project (`tar_ecg_hrv("subjA")`, `tar_ecg_hrv("subjB")`).
 
 ## Real data
 
+Reading a recording needs the modality package that owns that format –
+`PhysioIO` for EDF and WFDB – which is a `Suggests`, so install it
+alongside:
+
 ``` r
 
-# EEG from an EDF file
+# EEG from an EDF file (needs PhysioIO)
 tar_eeg_bandpower(source = quote(PhysioIO::readEDF("sub01.edf")))
 
 # ECG cohort: multiple WFDB records -> dynamic branching + a combined table
@@ -92,9 +106,9 @@ nextflow run $(Rscript -e 'cat(system.file("nextflow/ecg_hrv.nf", package="Physi
     --record data/100 --outdir results
 ```
 
-``` r
-
-# Layer 3a — targets emits the same Parquet as a tracked target
+``` text
+# Layer 3a — targets emits the same Parquet as a tracked target (needs a built
+# pipeline and the arrow package)
 tar_read(ecg_parquet)   # "results/ecg_hrv.parquet"
 ```
 
@@ -144,3 +158,9 @@ install.packages("PhysioPipe",
 - [`tar_physio_report()`](https://x-biosignal.github.io/PhysioPipe/reference/tar_physio_report.md)
   : Quarto report pipeline (target factory)
 
+# Articles
+
+### All vignettes
+
+- [Reproducible pipelines from one-line target
+  factories](https://x-biosignal.github.io/PhysioPipe/articles/target-factories.md):

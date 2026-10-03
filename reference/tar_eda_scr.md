@@ -26,5 +26,8 @@ A list of targets.
 ## Examples
 
 ``` r
-# list(tar_eda_scr())
+# Returns target objects (synthetic EDA demo: drifting SCL + discrete SCRs).
+targs <- tar_eda_scr()
+length(targs)
+#> [1] 4
 ```

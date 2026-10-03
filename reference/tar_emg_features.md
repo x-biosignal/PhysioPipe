@@ -27,5 +27,8 @@ A list of targets.
 ## Examples
 
 ``` r
-# list(tar_emg_features())
+# Returns target objects (synthetic bursty-EMG demo).
+targs <- tar_emg_features()
+length(targs)
+#> [1] 4
 ```

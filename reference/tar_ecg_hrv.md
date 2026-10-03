@@ -49,8 +49,14 @@ A list of target objects to splice into a `_targets.R` pipeline.
 ## Examples
 
 ``` r
-# In _targets.R:
-#   library(targets); library(PhysioPipe)
-#   list(tar_ecg_hrv())                       # bundled demo, single record
-#   list(tar_ecg_hrv(records = my_bases))     # cohort (dynamic branching)
+# The factory returns target objects to splice into a `_targets.R` list();
+# building them does not run the pipeline.
+targs <- tar_ecg_hrv()          # bundled demo record (single-record pipeline)
+length(targs)
+#> [1] 10
+class(targs[[1]])
+#> [1] "tar_stem"    "tar_builder" "tar_target"  "environment"
+# Cohort fan-out (dynamic branching) when given several record bases:
+length(tar_ecg_hrv(records = c("data/100", "data/101")))
+#> [1] 8
 ```

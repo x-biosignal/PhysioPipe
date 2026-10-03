@@ -21,3 +21,16 @@ pp_bind_cohort(branches, id = NULL)
 ## Value
 
 A single row-bound data frame.
+
+## Examples
+
+``` r
+branches <- list(
+  data.frame(sdnn = 50),
+  data.frame(sdnn = 61)
+)
+pp_bind_cohort(branches, id = c("rec100", "rec101"))
+#>   sdnn record
+#> 1   50 rec100
+#> 2   61 rec101
+```

@@ -24,3 +24,14 @@ pp_write_parquet(df, path)
 ## Value
 
 `path` (so the target can be `format = "file"`).
+
+## Examples
+
+``` r
+if (requireNamespace("arrow", quietly = TRUE)) {
+  path <- pp_write_parquet(data.frame(a = 1:3, b = 4:6),
+                           file.path(tempdir(), "demo.parquet"))
+  file.exists(path)
+}
+#> [1] TRUE
+```

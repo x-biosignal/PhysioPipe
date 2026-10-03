@@ -46,6 +46,10 @@ A list of targets.
 ## Examples
 
 ``` r
-# list(tar_eeg_bandpower())
-# list(tar_eeg_bandpower(source = quote(PhysioIO::readEDF("sub01.edf"))))
+# Returns target objects (synthetic EEG demo); splice into a `_targets.R`.
+targs <- tar_eeg_bandpower()
+length(targs)
+#> [1] 3
+# Point it at a real file instead of the synthetic demo:
+# tar_eeg_bandpower(source = quote(PhysioIO::readEDF("sub01.edf")))
 ```
