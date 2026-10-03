@@ -1,0 +1,111 @@
+---
+title: "Reproducible pipelines from one-line target factories"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Reproducible pipelines from one-line target factories}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+PhysioPipe is a collection of [`targets`](https://docs.ropensci.org/targets/)
+**target factories** for the Physio ecosystem. Each factory returns a *list of
+target objects* for one standard analysis, so a whole reproducible `_targets.R`
+is a couple of lines and you still get `targets`' incremental re-runs and
+byte-level provenance.
+
+This vignette builds factories and inspects the target objects they produce. It
+does **not** run a pipeline (`tar_make()`), which would need the ecosystem
+analysis packages and, for a report, the Quarto CLI.
+
+```{r setup}
+library(PhysioPipe)
+library(targets)
+```
+
+## A factory returns target objects
+
+`tar_ecg_hrv()` expands to the standard resting-ECG HRV pipeline
+(`read -> lead -> R-peaks -> RR -> {HRV time, HRV freq} -> summary`, plus a
+tachogram figure and a Parquet export):
+
+```{r ecg}
+ecg <- tar_ecg_hrv()
+length(ecg)
+vapply(ecg, function(t) t$settings$name, character(1))
+```
+
+Each element is a `targets` target object:
+
+```{r classes}
+class(ecg[[1]])
+```
+
+A real `_targets.R` just splices the list in:
+
+```{r targets-file, eval = FALSE}
+# _targets.R
+library(targets)
+library(PhysioPipe)
+list(
+  tar_ecg_hrv()                               # bundled demo record
+)
+# then, at the console:  targets::tar_make()
+```
+
+## The single-modality factories
+
+EEG band power, EMG amplitude/fatigue, and EDA skin-conductance each have a
+factory. With `source = NULL` they point at a seeded *synthetic* signal so the
+pipeline runs out of the box; pass an expression to read real data instead.
+
+```{r modalities}
+lengths(list(
+  eeg = tar_eeg_bandpower(),
+  emg = tar_emg_features(),
+  eda = tar_eda_scr()
+))
+
+# Point a factory at a real file:
+# tar_eeg_bandpower(source = quote(PhysioIO::readEDF("sub01.edf")))
+```
+
+## Cohorts fan out automatically
+
+Give `tar_ecg_hrv()` several record bases and it switches to dynamic branching
+(one branch per record) and adds a combined cohort table:
+
+```{r cohort}
+length(tar_ecg_hrv(records = c("data/100", "data/101", "data/102")))
+```
+
+## Synthetic demo data and pure helpers
+
+`pp_simulate()` makes a clearly-synthetic `PhysioExperiment` for exercising a
+pipeline's mechanics (not for making claims):
+
+```{r simulate, eval = requireNamespace("PhysioCore", quietly = TRUE)}
+pe <- pp_simulate("eeg")
+pe
+```
+
+Small pure helpers assemble pipeline outputs -- e.g. stacking per-record cohort
+branches into one table:
+
+```{r helper}
+pp_bind_cohort(
+  list(data.frame(sdnn = 50), data.frame(sdnn = 61)),
+  id = c("rec100", "rec101")
+)
+```
+
+## Where to go next
+
+* `?tar_ecg_hrv`, `?tar_eeg_bandpower`, `?tar_emg_features`, `?tar_eda_scr` --
+  the single-modality factories.
+* `?tar_physio_report` -- a Quarto report target (needs `tarchetypes` + Quarto).
+* `?pp_write_parquet` -- the language-neutral interchange seam that keeps a
+  pipeline orchestrator-agnostic.
